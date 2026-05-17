@@ -78,8 +78,14 @@ class GbxDevice(LK_Device):
 			self.DEVICE.reset_output_buffer()
 
 			self._write(bytearray(b'\x55\xAA'))
-			time.sleep(0.01)
-			device_id = self.DEVICE.read(self.DEVICE.in_waiting)
+			deadline = time.time() + 0.5
+			device_id = bytearray()
+			while time.time() < deadline:
+				time.sleep(0.01)
+				if self.DEVICE.in_waiting:
+					device_id += self.DEVICE.read(self.DEVICE.in_waiting)
+					if b"Chromatic" in device_id:
+						break
 
 			if b"Chromatic" not in device_id:
 				dprint("Not a Chromatic")

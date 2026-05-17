@@ -1,0 +1,8 @@
+.chromatic_dump_home/
+.pycache/
+.venv/
+FlashGBX.egg-info/
+dumps/
+evt1_x2.fs
+
+.DS_Store
