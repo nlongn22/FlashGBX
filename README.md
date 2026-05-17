@@ -1,5 +1,47 @@
 # FlashGBX (by Lesserkuma)
 
+## My Chromatic Save Dump Workflow
+
+This fork is set up for dumping Game Boy cartridge saves with a ModRetro Chromatic v2 on macOS. The working stack is:
+
+- `openFPGALoader` loads `evt1_x2.fs` into the Chromatic FPGA SRAM. This is temporary; power-cycling the Chromatic restores the normal firmware.
+- This branch of FlashGBX includes Chromatic support and a small local timing fix so the Chromatic firmware handshake is detected reliably.
+- `chromatic_dump.py` wraps the flow end to end: load SRAM firmware, detect the cartridge, create a per-game folder, and dump a timestamped save.
+
+Local-only files expected next to the script:
+
+```sh
+~/Projects/FlashGBX/evt1_x2.fs
+~/Projects/FlashGBX/.venv/
+```
+
+Normal save-only command:
+
+```sh
+cd ~/Projects/FlashGBX
+./chromatic_dump.py
+```
+
+Output example:
+
+```sh
+dumps/tetris_dx_world_sgb_enhanced_gb_compatible/saves/2026-05-17_14-25-13.sav
+```
+
+Optional commands:
+
+```sh
+./chromatic_dump.py --rom            # also dump ROM
+./chromatic_dump.py --skip-firmware  # skip SRAM firmware load if already loaded
+./chromatic_dump.py --port /dev/cu.usbmodem0123456783
+```
+
+Safety notes:
+
+- Insert or remove cartridges only while the Chromatic is powered off.
+- To restore original Chromatic firmware, fully power off and power on again.
+- Do not commit `evt1_x2.fs`, `.venv/`, `.chromatic_dump_home/`, or `dumps/`.
+
 for Windows, Linux, macOS (→ [Download](https://github.com/Lesserkuma/FlashGBX?tab=readme-ov-file#downloads))
 
 <img src="https://raw.githubusercontent.com/Lesserkuma/FlashGBX/master/.github/01.png" alt="FlashGBX on Windows 11" width="500"><br><img src="https://raw.githubusercontent.com/Lesserkuma/FlashGBX/master/.github/02.png" alt="GB Camera Album Viewer" width="500">
